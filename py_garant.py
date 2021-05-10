@@ -25,7 +25,7 @@ class PyGarant():
         params = self._get_default_params()
         return self._make_request('userinfo', params)
 
-    def sell_account(self, server, login, password, account_description, price, notify, onlymoney,  sellmsg=None, test=1) -> dict:
+    def sell_account(self, server, login, password, account_description, price, notify, onlymoney,  sellmsg=None, test=0) -> dict:
         '''
         Продажа аккаунта
 
