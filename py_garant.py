@@ -1,6 +1,9 @@
 import requests
-
+from responses.response import Response
+from responses.user_info import UserResponse, User
 # https://online-garant.net/doc
+
+
 class PyGarant():
     authority = 'https://api.online-garant.net/'
 
@@ -18,12 +21,12 @@ class PyGarant():
         resp = requests.get(self.authority + action, params=params)
         return resp.json()
 
-    def get_user_info(self) -> dict:
+    def get_user_info(self) -> UserResponse:
         '''
         Получение информации о пользователе
         '''
         params = self._get_default_params()
-        return self._make_request('userinfo', params)
+        return UserResponse(self._make_request('userinfo', params))
 
     def sell_account(self, server, login, password, account_description, price, notify, onlymoney,  sellmsg=None, test=0) -> dict:
         '''
@@ -58,6 +61,18 @@ class PyGarant():
             params.update({'sellmsg': sellmsg})
 
         return self._make_request('sell', params)
+
+    def get_prod_information(self, prod_id) -> dict:
+        '''
+        Получение информации о товаре
+        '''
+        params = self._get_default_params()
+        params.update(
+            {
+                'prodid': prod_id,
+            }
+        )
+        return self._make_request('prodinfo', params)
 
     def set_money_information(self, isauto, servercodes, price=None, avail=0, min_order=None) -> dict:
         '''
