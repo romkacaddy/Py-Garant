@@ -11,13 +11,13 @@ class PyGarant():
         self.token = token
         self.app_id = app_id
 
-    def _get_default_params(self) -> dict:
+    def _get_default_params(self) -> Response:
         return {
             'appid': self.app_id,
             'token': self.token
         }
 
-    def _make_request(self, action, params) -> dict:
+    def _make_request(self, action, params) -> Response:
         resp = requests.get(self.authority + action, params=params)
         return resp.json()
 
@@ -28,7 +28,7 @@ class PyGarant():
         params = self._get_default_params()
         return UserResponse(self._make_request('userinfo', params))
 
-    def sell_account(self, server, login, password, account_description, price, notify, onlymoney,  sellmsg=None, test=0) -> dict:
+    def sell_account(self, server, login, password, account_description, price, notify, onlymoney,  sellmsg=None, test=0) -> Response:
         '''
         Продажа аккаунта
 
@@ -60,9 +60,9 @@ class PyGarant():
         if sellmsg != None:
             params.update({'sellmsg': sellmsg})
 
-        return self._make_request('sell', params)
+        return Response(self._make_request('sell', params))
 
-    def get_prod_information(self, prod_id) -> dict:
+    def get_prod_information(self, prod_id) -> Response:
         '''
         Получение информации о товаре
         '''
@@ -72,9 +72,9 @@ class PyGarant():
                 'prodid': prod_id,
             }
         )
-        return self._make_request('prodinfo', params)
+        return Response(self._make_request('prodinfo', params))
 
-    def set_money_information(self, isauto, servercodes, price=None, avail=0, min_order=None) -> dict:
+    def set_money_information(self, isauto, servercodes, price=None, avail=0, min_order=None) -> Response:
         '''
         Объявление о продаже
 
@@ -103,9 +103,9 @@ class PyGarant():
         if min_order != None:
             params.update({'min': min_order})
 
-        return self._make_request('money', params)
+        return Response(self._make_request('money', params))
 
-    def get_orders(self) -> dict:
+    def get_orders(self) -> Response:
         '''
         Метод возвращает все незавершённые сделки, для которых была включена автоматическая выдача
         '''
@@ -116,9 +116,9 @@ class PyGarant():
             }
         )
         print(params)
-        return self._make_request('money', params)
+        return Response(self._make_request('money', params))
 
-    def accept_deal(self, deal_id) -> dict:
+    def accept_deal(self, deal_id) -> Response:
         '''
         Принять сделку. Должен отправляться тогда, когда бот начинает работу по выдаче заказа
         '''
@@ -129,9 +129,9 @@ class PyGarant():
                 'act': 'acceptDeal'
             }
         )
-        return self._make_request('money', params)
+        return Response(self._make_request('money', params))
 
-    def cancel_deal(self, deal_id) -> dict:
+    def cancel_deal(self, deal_id) -> Response:
         '''
         Отменить сделку
         '''
@@ -142,9 +142,9 @@ class PyGarant():
                 'act': 'cancelDeal'
             }
         )
-        return self._make_request('money', params)
+        return Response(self._make_request('money', params))
 
-    def done_deal(self, deal_id) -> dict:
+    def done_deal(self, deal_id) -> Response:
         '''
         Завершить сделку
         '''
@@ -155,9 +155,9 @@ class PyGarant():
                 'act': 'doneDeal'
             }
         )
-        return self._make_request('money', params)
+        return Response(self._make_request('money', params))
 
-    def send_message(self, deal_id, message_body) -> dict:
+    def send_message(self, deal_id, message_body) -> Response:
         '''
         Отправить сообщение
         '''
@@ -168,4 +168,4 @@ class PyGarant():
                 'msg': message_body
             }
         )
-        return self._make_request('sendMessage', params)
+        return Response(self._make_request('sendMessage', params))
